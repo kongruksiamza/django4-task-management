@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2 class="text-center">ระบบบริหารงาน (Task Management)</h2>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{message.tags}}" role="alert">{{message}}</div>
+        {% endfor %}
+    {% endif %}
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="name">ชื่อรายการ</label>
+            <input type="text" class="form-control" name="name">
+        </div>
+        <button type="submit" class="btn btn-primary my-2">บันทึก</button>
+    </form>
+    {% if all_task %}
+    <table class="table table-dark">
+        <thead>
+          <tr>
+            <th class="text-center">ชื่องาน</th>
+            <th class="text-center">สถานะ</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for task in all_task %}
+                {% if task.status %}
+                    <tr>
+                        <td class="text-center">{{task.name}}</td>
+                        <td class="text-center"><a href="{% url 'pending' task.id%}" class="btn btn-success">เสร็จสมบูรณ์</a></td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td class="text-center">{{task.name}}</td>
+                        <td class="text-center"><a href="{% url 'completed' task.id %}" class="btn btn-warning">รอดำเนินการ</a></td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+      </table>
+      <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            {% for num in all_task.paginator.page_range %}
+                {% if num != all_task.number %}
+                    <li class="page-item"><a class="page-link" href="?page={{num}}">{{num}}</a></li>
+                {% else %}
+                    <li class="page-item active"><a class="page-link" href="?page={{num}}">{{num}}</a></li>
+                {%endif%}
+            {% endfor %}
+        </ul>
+      </nav>
+    {% endif %}
+{% endblock %}

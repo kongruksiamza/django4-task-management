@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2 class="text-center">เข้าสู่ระบบ</h2>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{message.tags}}" role="alert">{{message}}</div>
+        {% endfor %}
+    {% endif %}
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="username">ชื่อผู้ใช้:</label>
+            <input type="text" class="form-control" name="username">
+        </div>
+        <div class="form-group">
+            <label for="password">รหัสผ่าน:</label>
+            <input type="password" class="form-control" name="password">
+        </div>
+        <button type="submit" class="btn btn-primary my-2">เข้าสู่ระบบ</button>
+    </form>
+{% endblock %}
